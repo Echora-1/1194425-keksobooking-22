@@ -1,4 +1,6 @@
-let getRandomIntFromRange = function (min, max) {
+'use strict'
+
+let getRandomIntFromRange = (min, max) => {
   min = Math.abs(min);
   max = Math.abs(max);
   if(min === max) {
@@ -12,7 +14,7 @@ let getRandomIntFromRange = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-let getRandomFloatFromRange = function (min, max, decimal) {
+let getRandomFloatFromRange = (min, max, decimal) => {
   min = Math.abs(min);
   max = Math.abs(max);
   decimal = Math.abs(decimal);
