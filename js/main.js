@@ -76,4 +76,4 @@ const createAd = () => {
 };
 
 const similarAd = new Array(similarCount).fill(null).map(() => createAd());
-
+similarAd()
