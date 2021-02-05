@@ -9,8 +9,8 @@ const urlPhotos = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
-const latitude = [35.65000, 35.70000];
-const longitude = [139.70000, 139.80000];
+const rangeLatitude = [35.65000, 35.70000];
+const rangeLongitude = [139.70000, 139.80000];
 const minPrice = 10000;
 const maxPrice = 100000;
 const minRooms = 1;
@@ -32,14 +32,14 @@ const getRandomArrayElement = (array) => {
 
 const getLocation = () => {
   return {
-    x: getRandomFloatFromRange(latitude[0], latitude[1], 5),
-    y: getRandomFloatFromRange(longitude[0], longitude[1], 5),
+    x: getRandomFloatFromRange(rangeLatitude[0], rangeLatitude[1], 5),
+    y: getRandomFloatFromRange(rangeLongitude[0], rangeLongitude[1], 5),
   };
 };
 
 const getNonRepeatingArray = (array) => {
-  let randomLength = getRandomFloatFromRange(0, array.length - 1);
-  let nonRepeatArray = [];
+  const randomLength = getRandomFloatFromRange(0, array.length - 1);
+  const nonRepeatArray = [];
 
   for(let i = 0; i <= randomLength; i++) {
     nonRepeatArray.push(array[i]);
@@ -49,15 +49,15 @@ const getNonRepeatingArray = (array) => {
 };
 
 const createAd = () => {
-  let location = getLocation();
-  let rooms = getRandomFloatFromRange(minRooms, maxRooms);
-  let type = getRandomArrayElement(typesOfHouses);
+  const location = getLocation();
+  const rooms = getRandomFloatFromRange(minRooms, maxRooms);
+  const type = getRandomArrayElement(typesOfHouses);
 
   return {
     author: { avatar: 'img/avatars/user'+ getRandomArrayElement(userAvatarNumbers)  +'.png' },
     offer: {
       title: title,
-      address: location.x + ', ' + location.y,
+      address: (location.x + ', ' + location.y).toString(),
       price: getRandomFloatFromRange(minPrice, maxPrice),
       type: type,
       rooms: rooms,
@@ -75,5 +75,5 @@ const createAd = () => {
   };
 };
 
-const similarAd = new Array(similarCount).fill(null).map(() => createAd());
-similarAd()
+const getSimilarAds = (count) => new Array(count).fill(null).map(() => createAd());
+getSimilarAds(similarCount);
