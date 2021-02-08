@@ -2,15 +2,15 @@
 const userAvatarNumbers = ['01', '02', '03', '04', '05', '06', '07', '08'];
 const title = 'For rent';
 const typesOfHouses = ['palace', 'flat', 'house', 'bungalow'];
-const availableTime = ['12:00', '13:00', '14:00'];
+const availableTimes = ['12:00', '13:00', '14:00'];
 const houseFeatures = [ 'wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const urlPhotos = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
-const rangeLatitude = [35.65000, 35.70000];
-const rangeLongitude = [139.70000, 139.80000];
+const rangeLatitudes = [35.65000, 35.70000];
+const rangeLongitudes = [139.70000, 139.80000];
 const minPrice = 10000;
 const maxPrice = 100000;
 const minRooms = 1;
@@ -32,20 +32,20 @@ const getRandomArrayElement = (array) => {
 
 const getLocation = () => {
   return {
-    x: getRandomFloatFromRange(rangeLatitude[0], rangeLatitude[1], 5),
-    y: getRandomFloatFromRange(rangeLongitude[0], rangeLongitude[1], 5),
+    x: getRandomFloatFromRange(rangeLatitudes[0], rangeLatitudes[1], 5),
+    y: getRandomFloatFromRange(rangeLongitudes[0], rangeLongitudes[1], 5),
   };
 };
 
-const getNonRepeatingArray = (array) => {
+const getArrayRandomLength = (array) => {
   const randomLength = getRandomFloatFromRange(0, array.length - 1);
-  const nonRepeatArray = [];
+  const arrayElements = [];
 
   for(let i = 0; i <= randomLength; i++) {
-    nonRepeatArray.push(array[i]);
+    arrayElements.push(array[i]);
   }
 
-  return nonRepeatArray;
+  return arrayElements;
 };
 
 const createAd = () => {
@@ -57,16 +57,16 @@ const createAd = () => {
     author: { avatar: 'img/avatars/user'+ getRandomArrayElement(userAvatarNumbers)  +'.png' },
     offer: {
       title: title,
-      address: (location.x + ', ' + location.y).toString(),
+      address: String(location.x + ', ' + location.y),
       price: getRandomFloatFromRange(minPrice, maxPrice),
       type: type,
       rooms: rooms,
       guests: rooms * 2,
-      checkin: getRandomArrayElement(availableTime),
-      checkout: getRandomArrayElement(availableTime),
-      features: getNonRepeatingArray(houseFeatures),
+      checkin: getRandomArrayElement(availableTimes),
+      checkout: getRandomArrayElement(availableTimes),
+      features: getArrayRandomLength(houseFeatures),
       description: descriptionOffer + ' ' + type,
-      photos: getNonRepeatingArray(urlPhotos),
+      photos: getArrayRandomLength(urlPhotos),
     },
     location: {
       x: location.x,
