@@ -1,12 +1,12 @@
 import {getRandomFloatFromRange} from './utils.js';
 
-const rangeLatitudes = [35.65000, 35.70000];
-const rangeLongitudes = [139.70000, 139.80000];
+const RANGE_LATITUDES = [35.65000, 35.70000];
+const RANGE_LONGITUDES = [139.70000, 139.80000];
 
 const getLocation = () => {
   return {
-    x: getRandomFloatFromRange(rangeLatitudes[0], rangeLatitudes[1], 5),
-    y: getRandomFloatFromRange(rangeLongitudes[0], rangeLongitudes[1], 5),
+    x: getRandomFloatFromRange(RANGE_LATITUDES[0], RANGE_LATITUDES[1], 5),
+    y: getRandomFloatFromRange(RANGE_LONGITUDES[0], RANGE_LONGITUDES[1], 5),
   };
 };
 

@@ -1,4 +1,5 @@
 import {getSimilarAds} from './data.js';
 
-const similarCount = 10;
-getSimilarAds(similarCount);
+const SIMILAR_COUNT = 10;
+
+getSimilarAds(SIMILAR_COUNT);
