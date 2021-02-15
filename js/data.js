@@ -5,7 +5,7 @@ const USER_AVATAR_NUMBERS = ['01', '02', '03', '04', '05', '06', '07', '08'];
 const TITLE = 'Уютное жильё в удобном районе';
 const TYPES_OF_HOUSES = ['palace', 'flat', 'house', 'bungalow'];
 const AVAILABLE_TIMES = ['12:00', '13:00', '14:00'];
-const HOUSE_FEATURES = [ 'wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+const HOUSE_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const URL_PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
@@ -23,10 +23,10 @@ const createAd = () => {
   const type = getRandomArrayElement(TYPES_OF_HOUSES);
 
   return {
-    author: { avatar: 'img/avatars/user'+ getRandomArrayElement(USER_AVATAR_NUMBERS)  +'.png' },
+    author: {avatar: `img/avatars/user${getRandomArrayElement(USER_AVATAR_NUMBERS)}.png`},
     offer: {
       title: TITLE,
-      address: String(location.x + ', ' + location.y),
+      address: `${String(location.x)},  ${String(location.y)}`,
       price: getRandomFloatFromRange(MIN_PRICE, MAX_PRICE),
       type: type,
       rooms: rooms,

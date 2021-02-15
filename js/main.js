@@ -1,5 +1,5 @@
 import {getSimilarAds} from './data.js';
-import {getCard} from './card-generation.js';
+import {getCard} from './ad-generation.js';
 
 const SIMILAR_COUNT = 10;
 const similarAds = getSimilarAds(SIMILAR_COUNT);

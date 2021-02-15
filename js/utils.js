@@ -21,5 +21,12 @@ const getArrayRandomLength = (array) => {
   return arrayElements;
 };
 
-export {getRandomFloatFromRange, getRandomArrayElement, getArrayRandomLength};
+const removeСhildByClass = (parentElement, childClass) => {
+  const arrayChildren = Array.from(parentElement.children);
+  arrayChildren.forEach((element) => {
+    if(element.classList.contains(childClass));
+    parentElement.removeChild(element);
+  });
+};
 
+export {getRandomFloatFromRange, getRandomArrayElement, getArrayRandomLength, removeСhildByClass};
