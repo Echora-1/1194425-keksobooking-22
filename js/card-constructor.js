@@ -47,7 +47,7 @@ const getPhotoListItem = (templatePhoto, photoSrc) => {
   return photo;
 };
 
-const creationAd = (item) => {
+const createAd = (item) => {
   const ad = template_card.cloneNode(true);
   const buildingType = getTranslationBuildingType(item.offer.type);
   const roomDeclension = getDeclensionWordRoom(item.offer.rooms)
@@ -75,4 +75,4 @@ const creationAd = (item) => {
   return ad;
 };
 
-export {creationAd};
+export {createAd};

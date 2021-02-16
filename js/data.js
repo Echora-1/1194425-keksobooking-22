@@ -17,7 +17,7 @@ const MIN_ROOMS = 1;
 const MAX_ROOMS = 12;
 const DESCRIPTION_OFFER = 'подходит как туристам, так и бизнесменам. С новым ремонтом и мебелью.';
 
-const simulationAd = () => {
+const getSimulationAd = () => {
   const location = getLocation();
   const rooms = getRandomFloatFromRange(MIN_ROOMS, MAX_ROOMS);
   const type = getRandomArrayElement(TYPES_OF_HOUSES);
@@ -44,6 +44,6 @@ const simulationAd = () => {
   };
 };
 
-const getSimilarAds = (count) => new Array(count).fill(null).map(() => simulationAd());
+const getSimilarAds = (count) => new Array(count).fill(null).map(() => getSimulationAd());
 
 export {getSimilarAds};
