@@ -15,7 +15,7 @@ const getTranslationBuildingType = (word) => {
   }
 };
 
-const getDeclensionWordrRoom = (quantity) => {
+const getDeclensionWordRoom = (quantity) => {
   const remainder = quantity % 100;
   const secondRemainder = remainder % 10;
 
@@ -37,7 +37,7 @@ const getFeatureListItem = (feature) => {
   item.classList.add('popup__features');
   item.classList.add(`popup__features--${feature}`);
   item.textContent = feature;
-  
+
   return item;
 };
 
@@ -47,10 +47,10 @@ const getPhotoListItem = (templatePhoto, photoSrc) => {
   return photo;
 };
 
-const getCard = (item) => {
+const creationAd = (item) => {
   const ad = template_card.cloneNode(true);
   const buildingType = getTranslationBuildingType(item.offer.type);
-  const roomDeclension = getDeclensionWordrRoom(item.offer.rooms)
+  const roomDeclension = getDeclensionWordRoom(item.offer.rooms)
   const photosList =  ad.querySelector('.popup__photos');
   const photosListItem = ad.querySelector('.popup__photo');
   const featureList = ad.querySelector('.popup__features');
@@ -75,4 +75,4 @@ const getCard = (item) => {
   return ad;
 };
 
-export {getCard};
+export {creationAd};
