@@ -5,21 +5,22 @@ const mapFilters = document.querySelector('.map__filters');
 const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
 const mapFeatures = mapFilters.querySelector('.map__features');
 
-const assignDisabledStatus = (boolean) => {
-  const elemnts = [];
+const getActiveOrInactiveStatus = (status) => {
+  const elements = [...adFormElements, adFormHeader, ...mapFiltersElements, mapFeatures];
 
-  elemnts.push(...adFormElements, adFormHeader, ...mapFiltersElements, mapFeatures);
-
-  if(boolean) {
+  if(status === 'inactive') {
     adForm.classList.add('ad-form--disabled');
     mapFilters.classList.add('map__filters--disabled');
-    elemnts.forEach((element) => element.setAttribute('disabled', ''));
+    elements.forEach((element) => element.setAttribute('disabled', ''));
   }
-  else {
+  else if(status === 'active') {
     adForm.classList.remove('ad-form--disabled');
     mapFilters.classList.remove('map__filters--disabled');
-    elemnts.forEach((element) => element.removeAttribute('disabled', ''));
+    elements.forEach((element) => element.removeAttribute('disabled', ''));
+  }
+  else {
+    throw new Error('для изменения статуса страницы используйте аргумент inactive или active');
   }
 };
 
-export {assignDisabledStatus};
+export {getActiveOrInactiveStatus};

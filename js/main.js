@@ -1,10 +1,11 @@
 import {getSimilarAds} from './data.js';
-import {assignDisabledStatus as assignPageDisabledStatus} from './page-states.js';
-import {loading as loadingMap, createAdMarkers} from './map.js';
+import {getActiveOrInactiveStatus as getActiveOrInactivePageStatus} from './page-states.js';
+import {toLoad as toLoadMap, createAdMarkers} from './map.js';
+import {} from './form.js';
 
 const SIMILAR_COUNT = 10;
 const similarAds = getSimilarAds(SIMILAR_COUNT);
 
-assignPageDisabledStatus(true);
-loadingMap();
+getActiveOrInactivePageStatus('inactive');
+toLoadMap();
 createAdMarkers(similarAds);

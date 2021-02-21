@@ -1,11 +1,11 @@
-import {assignDisabledStatus} from './page-states.js';
+import {getActiveOrInactiveStatus as getActiveOrInactivePageStatus} from './page-states.js';
 import {createAd} from './card-constructor.js';
 
 /* global L:readonly */
 const addressInput = document.querySelector('#address');
 const map = L.map('map-canvas');
-const mapСenterLatitude = 35.6895000;
-const mapСenterLongitude = 139.6917100;
+const STARTING_LATITUDE = 35.6895000;
+const STARTING_LONGITUDE = 139.6917100;
 const mainMarkerIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
   iconSize: [52, 52],
@@ -20,8 +20,8 @@ const adMarkerIcon = L.icon({
 
 const mainMarker = L.marker(
   {
-    lat: mapСenterLatitude,
-    lng: mapСenterLongitude,
+    lat: STARTING_LATITUDE,
+    lng: STARTING_LONGITUDE,
   },
   {
     draggable: true,
@@ -29,16 +29,14 @@ const mainMarker = L.marker(
   },
 );
 
-const loading = () => {
+const toLoad  = () => {
   map.on('load', () => {
-    assignDisabledStatus(false);
+    getActiveOrInactivePageStatus('active');
   })
     .setView({
-      lat: mapСenterLatitude,
-      lng: mapСenterLongitude,
+      lat: STARTING_LATITUDE,
+      lng: STARTING_LONGITUDE,
     }, 10);
-
-  addressInput.value = `${mapСenterLatitude.toFixed(5)}, ${mapСenterLongitude.toFixed(5)} `;
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -49,17 +47,16 @@ const loading = () => {
 
   mainMarker.addTo(map);
   mainMarker.on('move', (evt) => {
-    let coordinates = evt.target.getLatLng();
+    const coordinates = evt.target.getLatLng();
     addressInput.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
   });
 };
 
 const createAdMarkers = (data) => {
   data.forEach((element) => {
-    const ad = element;
     const marker = L.marker({
-      lat: ad.location.x,
-      lng: ad.location.y,
+      lat: element.location.x,
+      lng: element.location.y,
     },
     {
       icon: adMarkerIcon,
@@ -75,4 +72,4 @@ const createAdMarkers = (data) => {
   });
 }
 
-export {loading, createAdMarkers};
+export {toLoad, createAdMarkers, STARTING_LATITUDE, STARTING_LONGITUDE};
