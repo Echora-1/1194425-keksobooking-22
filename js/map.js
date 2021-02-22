@@ -1,11 +1,11 @@
-import {getActiveOrInactiveStatus as getActiveOrInactivePageStatus} from './page-states.js';
+import {assignActiveStatus as assigPagenActiveStatus} from './page-states.js';
 import {createAd} from './card-constructor.js';
 
 /* global L:readonly */
-const addressInput = document.querySelector('#address');
-const map = L.map('map-canvas');
 const STARTING_LATITUDE = 35.6895000;
 const STARTING_LONGITUDE = 139.6917100;
+const addressInput = document.querySelector('#address');
+const map = L.map('map-canvas');
 const mainMarkerIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
   iconSize: [52, 52],
@@ -29,14 +29,14 @@ const mainMarker = L.marker(
   },
 );
 
-const toLoad  = () => {
+const load  = () => {
   map.on('load', () => {
-    getActiveOrInactivePageStatus('active');
+    assigPagenActiveStatus();
   })
     .setView({
       lat: STARTING_LATITUDE,
       lng: STARTING_LONGITUDE,
-    }, 10);
+    }, 13);
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -72,4 +72,4 @@ const createAdMarkers = (data) => {
   });
 }
 
-export {toLoad, createAdMarkers, STARTING_LATITUDE, STARTING_LONGITUDE};
+export {load, createAdMarkers, STARTING_LATITUDE, STARTING_LONGITUDE};
