@@ -34,9 +34,8 @@ const getDeclensionWordRoom = (quantity) => {
 const getFeatureListItem = (feature) => {
   const item = document.createElement('li');
 
-  item.classList.add('popup__features');
-  item.classList.add(`popup__features--${feature}`);
-  item.textContent = feature;
+  item.classList.add('popup__feature');
+  item.classList.add(`popup__feature--${feature}`);
 
   return item;
 };
