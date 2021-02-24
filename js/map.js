@@ -1,5 +1,6 @@
-import {assignActiveStatus as assigPagenActiveStatus} from './page-states.js';
+import {assignActiveStatus as assignPageActiveStatus} from './page-states.js';
 import {createAd} from './card-constructor.js';
+
 
 /* global L:readonly */
 const STARTING_LATITUDE = 35.6895000;
@@ -31,7 +32,8 @@ const mainMarker = L.marker(
 
 const load  = () => {
   map.on('load', () => {
-    assigPagenActiveStatus();
+    assignPageActiveStatus();
+
   })
     .setView({
       lat: STARTING_LATITUDE,
