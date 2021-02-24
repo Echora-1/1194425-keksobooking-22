@@ -1,50 +1,40 @@
 import {STARTING_LATITUDE, STARTING_LONGITUDE} from './map.js';
 
-const BUNGALO_MIN_PRICE = 0;
-const FLAT_MIN_PRICE = 1000;
-const HOUSE_MIN_PRICE = 5000;
-const PALACE_MIN_PRICE = 10000;
+const MINIMUM_PRICES = {
+  bungalow: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000,
+};
 const adForm = document.querySelector('.ad-form');
 const addressInput = adForm.querySelector('#address');
 const pricePerNight = adForm.querySelector('#price');
-const typeHouse = adForm.querySelector('#type');
+const houseType = adForm.querySelector('#type');
 const timesIn = adForm.querySelector('#timein');
 const timesOut = adForm.querySelector('#timeout');
 
 addressInput.value = `${STARTING_LATITUDE.toFixed(5)}, ${STARTING_LONGITUDE.toFixed(5)} `;
 
-const setMinPricePerNight = (typeHouse) => {
-  switch(typeHouse) {
-    case 'bungalow':
-      return pricePerNight.setAttribute('placeholder', String(BUNGALO_MIN_PRICE)),
-      pricePerNight.setAttribute('min', String(BUNGALO_MIN_PRICE));
-    case 'flat':
-      return pricePerNight.setAttribute('placeholder', String(FLAT_MIN_PRICE)),
-      pricePerNight.setAttribute('min', String(FLAT_MIN_PRICE));
-    case 'house':
-      return pricePerNight.setAttribute('placeholder', String(HOUSE_MIN_PRICE)),
-      pricePerNight.setAttribute('min', String(HOUSE_MIN_PRICE));
-    case 'palace':
-      return pricePerNight.setAttribute('placeholder', String(PALACE_MIN_PRICE)),
-      pricePerNight.setAttribute('min', String(PALACE_MIN_PRICE));
-  }
+const setMinPricePerNight = (houseType) => {
+  pricePerNight.setAttribute('placeholder', String(MINIMUM_PRICES[houseType]));
+  pricePerNight.setAttribute('min', String(MINIMUM_PRICES[houseType]));
 };
 
-setMinPricePerNight(typeHouse.value);
+setMinPricePerNight(houseType.value);
 
-typeHouse.addEventListener('change', () => {
-  setMinPricePerNight(typeHouse.value)
+houseType.addEventListener('change', () => {
+  setMinPricePerNight(houseType.value)
 });
 
-const syncSelectByValue = (firstSelect, secondSelect) => {
+const syncSelectByIndex = (firstSelect, secondSelect) => {
   firstSelect.addEventListener('change', () => {
-    secondSelect.selectedIndex = Array.from(secondSelect.children).findIndex(option => option.value === firstSelect.value);
+    secondSelect.selectedIndex = firstSelect.selectedIndex;
   });
   secondSelect.addEventListener('change', () => {
-    firstSelect.selectedIndex = Array.from(firstSelect.children).findIndex(option => option.value === secondSelect.value);
+    firstSelect.selectedIndex = secondSelect.selectedIndex;
   });
 };
 
-syncSelectByValue(timesIn, timesOut);
+syncSelectByIndex(timesIn, timesOut);
 
 export {};
