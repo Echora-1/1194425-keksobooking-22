@@ -1,6 +1,7 @@
-import {STARTING_LATITUDE, STARTING_LONGITUDE, mainMarker} from './map.js';
+import {STARTING_LATITUDE, STARTING_LONGITUDE, resetMainMarker} from './map.js';
 import {sendData} from './server-connection.js';
-import {assignActiveStatus as assignPageActiveStatus, assignInactiveStatus as assignPageInactiveStatus} from './page-states.js';
+import {getSuccess as getSuccessMessage, getErrore as getErrorMessage} from './status-messages.js';
+
 
 const MINIMUM_PRICES = {
   bungalow: 0,
@@ -14,15 +15,13 @@ const pricePerNight = ad.querySelector('#price');
 const houseType = ad.querySelector('#type');
 const timesIn = ad.querySelector('#timein');
 const timesOut = ad.querySelector('#timeout');
-const successMessage = document.querySelector('#success').content.querySelector('.success');
-const errorMessage = document.querySelector('#error').content.querySelector('.error');
-const errorButtom = errorMessage.querySelector('.error__button');
-const main = document.querySelector('main');
 const mapFilters = document.querySelector('.map__filters');
 const clearButton = ad.querySelector('.ad-form__reset');
 
 const setStartingAddress = () => {
-  addressInput.value = `${STARTING_LATITUDE.toFixed(5)}, ${STARTING_LONGITUDE.toFixed(5)} `;
+  setTimeout(() => {
+    addressInput.value = `${STARTING_LATITUDE.toFixed(5)}, ${STARTING_LONGITUDE.toFixed(5)} `;
+  }, 0);
 };
 
 const setMinPricePerNight = (houseType) => {
@@ -31,7 +30,7 @@ const setMinPricePerNight = (houseType) => {
 };
 
 houseType.addEventListener('change', () => {
-  setMinPricePerNight(houseType.value)
+  setMinPricePerNight(houseType.value);
 });
 
 const syncSelectByIndex = (firstSelect, secondSelect) => {
@@ -46,52 +45,11 @@ const syncSelectByIndex = (firstSelect, secondSelect) => {
 const clear = () => {
   ad.reset();
   mapFilters.reset();
-  mainMarker.setLatLng({lat: STARTING_LATITUDE, lng: STARTING_LONGITUDE});
-  setTimeout(() => {
-    setStartingAddress();
-  }, 0);
+  resetMainMarker();
+  setStartingAddress();
 };
 
 clearButton.addEventListener('click', clear);
-
-const closeSuccessMessage = (evt) => {
-  if(evt.key === 'Escape' || evt.key === 'Esc'|| evt.type === 'mousedown') {
-    evt.preventDefault();
-    successMessage.remove();
-    assignPageActiveStatus();
-    document.removeEventListener('keydown', closeSuccessMessage);
-    document.removeEventListener('mousedown', closeSuccessMessage);
-  }
-}
-
-const getSuccessMessage = () => {
-  successMessage.style.zIndex = 1000;
-  main.append(successMessage);
-  clear();
-  assignPageInactiveStatus();
-  document.addEventListener('keydown', closeSuccessMessage);
-  document.addEventListener('mousedown', closeSuccessMessage);
-}
-
-const closeErrorMessage = (evt) => {
-  if(evt.key === 'Escape' || evt.key === 'Esc'|| evt.type === 'mousedown' || evt.key === 'Enter') {
-    evt.preventDefault();
-    errorMessage.remove();
-    assignPageActiveStatus();
-    document.removeEventListener('keydown', closeErrorMessage);
-    document.removeEventListener('mousedown', closeErrorMessage);
-    errorButtom.removeEventListener('keydown', closeErrorMessage);
-  }
-}
-
-const getErrorMessage = () => {
-  errorMessage.style.zIndex = 1000;
-  main.append(errorMessage);
-  assignPageInactiveStatus();
-  document.addEventListener('keydown', closeErrorMessage);
-  document.addEventListener('mousedown', closeErrorMessage);
-  errorButtom.addEventListener('keydown', closeErrorMessage);
-}
 
 const setSendingData = () => {
   ad.addEventListener('submit', (evt) => {
@@ -105,4 +63,4 @@ setMinPricePerNight(houseType.value);
 syncSelectByIndex(timesIn, timesOut);
 setSendingData();
 
-export {};
+export {clear};

@@ -1,6 +1,6 @@
 import {removeСhildByClass} from './utils.js';
 
-const template_card = document.querySelector('#card').content.querySelector('.popup');
+const template = document.querySelector('#card').content.querySelector('.popup');
 
 const getTranslationBuildingType = (word) => {
   switch (word) {
@@ -46,8 +46,8 @@ const getPhotoListItem = (templatePhoto, photoSrc) => {
   return photo;
 };
 
-const createAd = (item) => {
-  const ad = template_card.cloneNode(true);
+const create = (item) => {
+  const ad = template.cloneNode(true);
   const buildingType = getTranslationBuildingType(item.offer.type);
   const roomDeclension = getDeclensionWordRoom(item.offer.rooms)
   const photosList =  ad.querySelector('.popup__photos');
@@ -74,4 +74,4 @@ const createAd = (item) => {
   return ad;
 };
 
-export {createAd};
+export {create};

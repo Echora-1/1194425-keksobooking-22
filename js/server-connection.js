@@ -1,28 +1,11 @@
-const ALERT_SHOW_TIME = 5000;
+import {showMessage as showAlert} from './alerts.js';
+
 const RECEIVE_ERROR_MESSAGE = 'При загрузке данных с сервера произошла ошибка. Попробуйте позже';
-
-const showAlert = (message) => {
-  const alertContainer = document.createElement('div');
-
-  alertContainer.style.zIndex = 1000;
-  alertContainer.style.position = 'fixed';
-  alertContainer.style.left = 0;
-  alertContainer.style.top = '18px';
-  alertContainer.style.right = 0;
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '30px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = '#ff6d51';
-  alertContainer.textContent = message;
-  document.body.append(alertContainer);
-
-  setTimeout(() => {
-    alertContainer.remove();
-  }, ALERT_SHOW_TIME);
-}
+const getUrl = 'https://22.javascript.pages.academy/keksobooking/data';
+const sendUrl = 'https://22.javascript.pages.academy/keksobooking';
 
 const getData = (onSuccess) => {
-  fetch('https://22.javascript.pages.academy/keksobooking/data')
+  fetch(getUrl)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -40,7 +23,7 @@ const getData = (onSuccess) => {
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://22.javascript.pages.academy/keksobooking',
+    sendUrl,
     {
       method: 'POST',
       body,

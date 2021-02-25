@@ -1,6 +1,5 @@
 import {assignActiveStatus as assignPageActiveStatus} from './page-states.js';
-import {createAd} from './card-constructor.js';
-
+import {create as createAd} from './ad-constructor.js';
 
 /* global L:readonly */
 const STARTING_LATITUDE = 35.6895000;
@@ -74,4 +73,12 @@ const createAdMarkers = (data) => {
   });
 }
 
-export {load, createAdMarkers, STARTING_LATITUDE, STARTING_LONGITUDE, mainMarker};
+const resetMainMarker = () => {
+  mainMarker.setLatLng({lat: STARTING_LATITUDE, lng: STARTING_LONGITUDE});
+  map.setView({
+    lat: STARTING_LATITUDE,
+    lng: STARTING_LONGITUDE,
+  }, 13);
+};
+
+export {load, createAdMarkers, STARTING_LATITUDE, STARTING_LONGITUDE, resetMainMarker};
