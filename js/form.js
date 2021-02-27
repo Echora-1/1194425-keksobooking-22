@@ -1,6 +1,6 @@
-import {STARTING_LATITUDE, STARTING_LONGITUDE, resetMainMarker} from './map.js';
+import {setStartPosition, recordStartingAddress, setMoveMainMarker} from './map.js';
 import {sendData} from './server-connection.js';
-import {getSuccess as getSuccessMessage, getErrore as getErrorMessage} from './status-messages.js';
+import {getSuccess as getSuccessMessage, getError as getErrorMessage} from './status-messages.js';
 
 
 const MINIMUM_PRICES = {
@@ -18,11 +18,6 @@ const timesOut = ad.querySelector('#timeout');
 const mapFilters = document.querySelector('.map__filters');
 const clearButton = ad.querySelector('.ad-form__reset');
 
-const setStartingAddress = () => {
-  setTimeout(() => {
-    addressInput.value = `${STARTING_LATITUDE.toFixed(5)}, ${STARTING_LONGITUDE.toFixed(5)} `;
-  }, 0);
-};
 
 const setMinPricePerNight = (houseType) => {
   pricePerNight.setAttribute('placeholder', String(MINIMUM_PRICES[houseType]));
@@ -45,11 +40,14 @@ const syncSelectByIndex = (firstSelect, secondSelect) => {
 const clear = () => {
   ad.reset();
   mapFilters.reset();
-  resetMainMarker();
-  setStartingAddress();
+  setStartPosition();
+  recordStartingAddress(addressInput);
 };
 
-clearButton.addEventListener('click', clear);
+clearButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  clear();
+});
 
 const setSendingData = () => {
   ad.addEventListener('submit', (evt) => {
@@ -58,7 +56,8 @@ const setSendingData = () => {
   });
 };
 
-setStartingAddress();
+recordStartingAddress(addressInput);
+setMoveMainMarker(addressInput);
 setMinPricePerNight(houseType.value);
 syncSelectByIndex(timesIn, timesOut);
 setSendingData();

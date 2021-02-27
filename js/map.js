@@ -4,7 +4,8 @@ import {create as createAd} from './ad-constructor.js';
 /* global L:readonly */
 const STARTING_LATITUDE = 35.6895000;
 const STARTING_LONGITUDE = 139.6917100;
-const addressInput = document.querySelector('#address');
+const URL_TEMPLATEL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const map = L.map('map-canvas');
 const mainMarkerIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
@@ -28,29 +29,28 @@ const mainMarker = L.marker(
     icon: mainMarkerIcon,
   },
 );
+mainMarker.addTo(map);
+
+L.tileLayer(
+  URL_TEMPLATEL,
+  {
+    attribution: COPYRIGHT,
+  },
+).addTo(map);
+
+const setStartPosition = () => {
+  mainMarker.setLatLng({lat: STARTING_LATITUDE, lng: STARTING_LONGITUDE});
+  map.setView({
+    lat: STARTING_LATITUDE,
+    lng: STARTING_LONGITUDE,
+  }, 13);
+};
 
 const load  = () => {
   map.on('load', () => {
     assignPageActiveStatus();
-
   })
-    .setView({
-      lat: STARTING_LATITUDE,
-      lng: STARTING_LONGITUDE,
-    }, 13);
-
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ).addTo(map);
-
-  mainMarker.addTo(map);
-  mainMarker.on('move', (evt) => {
-    const coordinates = evt.target.getLatLng();
-    addressInput.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
-  });
+  setStartPosition();
 };
 
 const createAdMarkers = (data) => {
@@ -73,12 +73,16 @@ const createAdMarkers = (data) => {
   });
 }
 
-const resetMainMarker = () => {
-  mainMarker.setLatLng({lat: STARTING_LATITUDE, lng: STARTING_LONGITUDE});
-  map.setView({
-    lat: STARTING_LATITUDE,
-    lng: STARTING_LONGITUDE,
-  }, 13);
+const recordStartingAddress = (input) => {
+  const coordinates = mainMarker.getLatLng();
+  input.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
 };
 
-export {load, createAdMarkers, STARTING_LATITUDE, STARTING_LONGITUDE, resetMainMarker};
+const setMoveMainMarker = (input) => {
+  mainMarker.on('move', (evt) => {
+    const coordinates = evt.target.getLatLng();
+    input.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
+  });
+};
+
+export {load, createAdMarkers, setStartPosition, recordStartingAddress, setMoveMainMarker};

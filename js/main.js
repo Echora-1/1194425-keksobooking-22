@@ -4,5 +4,7 @@ import {} from './form.js';
 import {getData} from './server-connection.js';
 
 assignPageInactiveStatus();
+
 loadMap();
 getData(createAdMarkers);
+

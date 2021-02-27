@@ -1,11 +1,11 @@
 import {showMessage as showAlert} from './alerts.js';
 
 const RECEIVE_ERROR_MESSAGE = 'При загрузке данных с сервера произошла ошибка. Попробуйте позже';
-const getUrl = 'https://22.javascript.pages.academy/keksobooking/data';
-const sendUrl = 'https://22.javascript.pages.academy/keksobooking';
+const GET_URL = 'https://22.javascript.pages.academy/keksobooking/data';
+const SEND_URL = 'https://22.javascript.pages.academy/keksobooking';
 
 const getData = (onSuccess) => {
-  fetch(getUrl)
+  fetch(GET_URL)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -23,7 +23,7 @@ const getData = (onSuccess) => {
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    sendUrl,
+    SEND_URL,
     {
       method: 'POST',
       body,
