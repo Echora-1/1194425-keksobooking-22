@@ -1,4 +1,7 @@
-import {STARTING_LATITUDE, STARTING_LONGITUDE} from './map.js';
+import {setStartPosition, recordStartingAddress, setMoveMainMarker} from './map.js';
+import {sendData} from './server-connection.js';
+import {getSuccess as getSuccessMessage, getError as getErrorMessage} from './status-messages.js';
+
 
 const MINIMUM_PRICES = {
   bungalow: 0,
@@ -6,24 +9,23 @@ const MINIMUM_PRICES = {
   house: 5000,
   palace: 10000,
 };
-const adForm = document.querySelector('.ad-form');
-const addressInput = adForm.querySelector('#address');
-const pricePerNight = adForm.querySelector('#price');
-const houseType = adForm.querySelector('#type');
-const timesIn = adForm.querySelector('#timein');
-const timesOut = adForm.querySelector('#timeout');
+const ad = document.querySelector('.ad-form');
+const addressInput = ad.querySelector('#address');
+const pricePerNight = ad.querySelector('#price');
+const houseType = ad.querySelector('#type');
+const timesIn = ad.querySelector('#timein');
+const timesOut = ad.querySelector('#timeout');
+const mapFilters = document.querySelector('.map__filters');
+const clearButton = ad.querySelector('.ad-form__reset');
 
-addressInput.value = `${STARTING_LATITUDE.toFixed(5)}, ${STARTING_LONGITUDE.toFixed(5)} `;
 
 const setMinPricePerNight = (houseType) => {
   pricePerNight.setAttribute('placeholder', String(MINIMUM_PRICES[houseType]));
   pricePerNight.setAttribute('min', String(MINIMUM_PRICES[houseType]));
 };
 
-setMinPricePerNight(houseType.value);
-
 houseType.addEventListener('change', () => {
-  setMinPricePerNight(houseType.value)
+  setMinPricePerNight(houseType.value);
 });
 
 const syncSelectByIndex = (firstSelect, secondSelect) => {
@@ -35,6 +37,29 @@ const syncSelectByIndex = (firstSelect, secondSelect) => {
   });
 };
 
-syncSelectByIndex(timesIn, timesOut);
+const clear = () => {
+  ad.reset();
+  mapFilters.reset();
+  setStartPosition();
+  recordStartingAddress(addressInput);
+};
 
-export {};
+clearButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  clear();
+});
+
+const setSendingData = () => {
+  ad.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(getSuccessMessage, getErrorMessage, new FormData(evt.target));
+  });
+};
+
+recordStartingAddress(addressInput);
+setMoveMainMarker(addressInput);
+setMinPricePerNight(houseType.value);
+syncSelectByIndex(timesIn, timesOut);
+setSendingData();
+
+export {clear};

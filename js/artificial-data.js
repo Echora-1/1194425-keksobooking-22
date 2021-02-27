@@ -1,5 +1,5 @@
 import {getRandomFloatFromRange, getRandomArrayElement, getArrayRandomLength} from './utils.js';
-import {getLocation} from './coordinates.js';
+import {getLocation} from './artificial-coordinates.js';
 
 const USER_AVATAR_NUMBERS = ['01', '02', '03', '04', '05', '06', '07', '08'];
 const TITLE = 'Уютное жильё в удобном районе';
