@@ -1,12 +1,14 @@
 import {assignActiveStatus as assignPageActiveStatus} from './page-states.js';
 import {create as createAd} from './ad-constructor.js';
-
+import {sortRank} from './filter.js';
 /* global L:readonly */
 const STARTING_LATITUDE = 35.6895000;
 const STARTING_LONGITUDE = 139.6917100;
 const URL_TEMPLATEL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const AMOUNT_MARKERS = 5;
 const map = L.map('map-canvas');
+const markersLayer = new L.LayerGroup();
 const mainMarkerIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
   iconSize: [52, 52],
@@ -53,24 +55,30 @@ const load  = () => {
   setStartPosition();
 };
 
-const createAdMarkers = (data) => {
-  data.forEach((element) => {
-    const marker = L.marker({
-      lat: element.location.lat,
-      lng: element.location.lng,
-    },
-    {
-      icon: adMarkerIcon,
-    },
-    );
 
-    marker.addTo(map).bindPopup(
-      createAd(element),
-      {
-        keepInView: true,
+const createAdMarkers = (data) => {
+  markersLayer.clearLayers();
+  data.slice()
+    .sort(sortRank)
+    .slice(0, AMOUNT_MARKERS)
+    .forEach((element) => {
+      const marker = L.marker({
+        lat: element.location.lat,
+        lng: element.location.lng,
       },
-    );
-  });
+      {
+        icon: adMarkerIcon,
+      },
+      );
+      marker.bindPopup(
+        createAd(element),
+        {
+          keepInView: true,
+        },
+      );
+      markersLayer.addLayer(marker);
+    });
+  markersLayer.addTo(map);
 }
 
 const recordStartingAddress = (input) => {
@@ -86,3 +94,4 @@ const setMoveMainMarker = (input) => {
 };
 
 export {load, createAdMarkers, setStartPosition, recordStartingAddress, setMoveMainMarker};
+
