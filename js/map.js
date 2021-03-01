@@ -1,12 +1,12 @@
 import {assignActiveStatus as assignPageActiveStatus} from './page-states.js';
 import {create as createAd} from './ad-constructor.js';
-import {sortRank} from './filter.js';
+import {getAdMatch} from './filter.js';
 /* global L:readonly */
 const STARTING_LATITUDE = 35.6895000;
 const STARTING_LONGITUDE = 139.6917100;
 const URL_TEMPLATEL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-const AMOUNT_MARKERS = 5;
+const AMOUNT_MARKERS = 10;
 const map = L.map('map-canvas');
 const markersLayer = new L.LayerGroup();
 const mainMarkerIcon = L.icon({
@@ -59,7 +59,7 @@ const load  = () => {
 const createAdMarkers = (data) => {
   markersLayer.clearLayers();
   data.slice()
-    .sort(sortRank)
+    .filter(ad => getAdMatch(ad))
     .slice(0, AMOUNT_MARKERS)
     .forEach((element) => {
       const marker = L.marker({

@@ -8,65 +8,55 @@ const housingFeatures = form.querySelector('#housing-features');
 const getPrice = (value) => {
   switch(value) {
     case 'any':
-      return [0, 0];
+      return [0, 10000000];
     case 'low':
       return [0, 10000];
     case 'middle':
       return [10000, 50000];
     case 'high':
-      return [50000, 1000000];
+      return [50000, 10000000];
   }
 }
 
-const getFeatureCoincidenceRank = (firstFeatures, secondFeatures) => {
-  let rank = 0
-
-  firstFeatures.forEach(element => {
-    if(secondFeatures.includes(element)) {
-      rank += 3;
+const getMatchingFeatures = (selectedFeatures, features) => {
+  let match = true;
+  if(selectedFeatures.length === 0){
+    return match;
+  }
+  selectedFeatures.forEach(element => {
+    if(!(features.includes(element))) {
+      match = false;
     }
   });
-  
-  return rank;
+  return match;
 }
 
-const getAdMatchRank = (ad) => {
-  let rank = 0;
+const getAdMatch = (ad) => {
+  let match = true;
   const price = getPrice(housingPrice.value);
   const features = Array.from(housingFeatures.children).filter(element => element.checked);
-  const selectedFeatures = features.map(item => item.value);
+  const valueFeatures = features.map(item => item.value);
   const adFeatures = ad.offer.features;
-
-  if(ad.offer.type === housingType.value) {
-    rank += 3;
+  if(ad.offer.type !== housingType.value && housingType.value !== 'any') {
+    match = false;
+    return match;
   }
-  if(price[0] < ad.offer.price &&  ad.offer.price < price[1]) {
-    rank +=3;
+  if(!(price[0] <= ad.offer.price &&  ad.offer.price < price[1])) {
+    match = false;
+    return match;
   }
-  if(ad.offer.rooms === Number(housingRooms.value)) {
-    rank += 3;
+  if(ad.offer.rooms !== Number(housingRooms.value) && housingRooms.value !== 'any') {
+    match = false;
+    return match;
   }
-  if(ad.offer.rooms > Number(housingRooms.value)) {
-    rank++;
-  }
-  if(ad.offer.guests === Number(housingGuests.value)) {
-    rank += 3;
-  }
-  if(ad.offer.guests > Number(housingGuests.value)) {
-    rank++;
+  if(ad.offer.guests !== Number(housingGuests.value) && housingGuests.value !== 'any') {
+    match = false;
+    return match;
   }
 
-  rank += getFeatureCoincidenceRank(selectedFeatures, adFeatures);
-
-  return rank;
+  match = getMatchingFeatures(valueFeatures, adFeatures);
+  return match;
 };
-
-const sortRank = (firstAd, secondAd ) => {
-  const firstRank = getAdMatchRank(firstAd);
-  const secondRank = getAdMatchRank(secondAd);
-
-  return secondRank - firstRank;
-}
 
 const setMapChanges = (cb) => {
   form.addEventListener('change', (evt) => {
@@ -81,4 +71,4 @@ const setMapChanges = (cb) => {
   });
 };
 
-export {sortRank, setMapChanges};
+export {getAdMatch, setMapChanges};
