@@ -1,5 +1,5 @@
 import {assignInactiveStatus as assignPageInactiveStatus} from './page-states.js';
-import {loadMap, createAdMarkers} from './leaflet.js';
+import {load as loadMap, createAdMarkers} from './map.js';
 import {} from './form.js';
 import {getData} from './server-connection.js';
 import {setMapChanges as setMapFilterChanges} from './filter.js';

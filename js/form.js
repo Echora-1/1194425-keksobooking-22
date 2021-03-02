@@ -1,4 +1,4 @@
-import {setStartPosition, recordStartingAddress, setMoveMainMarker} from './leaflet.js';
+import {setStartPosition, recordStartingAddress, setMoveMainMarker} from './map.js';
 import {sendData} from './server-connection.js';
 import {getSuccess as getSuccessMessage, getError as getErrorMessage} from './status-messages.js';
 

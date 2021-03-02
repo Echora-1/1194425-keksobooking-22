@@ -49,7 +49,7 @@ const setStartPosition = () => {
   }, 13);
 };
 
-const loadMap  = () => {
+const load  = () => {
   map.on('load', () => {
     assignPageActiveStatus();
   })
@@ -94,5 +94,5 @@ const setMoveMainMarker = (input) => {
   });
 };
 
-export {loadMap, createAdMarkers, setStartPosition, recordStartingAddress, setMoveMainMarker};
+export {load, createAdMarkers, setStartPosition, recordStartingAddress, setMoveMainMarker};
 
