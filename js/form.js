@@ -1,7 +1,6 @@
-import {setStartPosition, recordStartingAddress, setMoveMainMarker} from './map.js';
+import {setStartPosition, recordStartingAddress, setMoveMainMarker} from './leaflet.js';
 import {sendData} from './server-connection.js';
 import {getSuccess as getSuccessMessage, getError as getErrorMessage} from './status-messages.js';
-
 
 const MINIMUM_PRICES = {
   bungalow: 0,
@@ -9,7 +8,7 @@ const MINIMUM_PRICES = {
   house: 5000,
   palace: 10000,
 };
-const MAX_PRICE = 1000000;
+
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const ad = document.querySelector('.ad-form');
@@ -29,7 +28,6 @@ const clearButton = ad.querySelector('.ad-form__reset');
 const setMinPricePerNight = (houseType) => {
   pricePerNight.setAttribute('placeholder', String(MINIMUM_PRICES[houseType]));
   pricePerNight.setAttribute('min', String(MINIMUM_PRICES[houseType]));
-  pricePerNight.setAttribute('max', String(MAX_PRICE));
 };
 
 houseType.addEventListener('change', () => {
@@ -77,10 +75,7 @@ titleInput.addEventListener('input', setTitleValidation);
 const setPriceValidation = () => {
   const valuePrice = priceInput.value;
 
-  if(valuePrice > MAX_PRICE){
-    priceInput.setCustomValidity(`Цена за ночь не может превышать ${MAX_PRICE}.`);
-  }
-  else if (Number(priceInput.getAttribute('min')) > valuePrice) {
+  if (Number(priceInput.getAttribute('min')) > valuePrice) {
     priceInput.setCustomValidity(`Цена за ночь не может быть меньше ${priceInput.getAttribute('min')}.`);
   }
   else {
@@ -93,22 +88,19 @@ houseType.addEventListener('change', setPriceValidation);
 priceInput.addEventListener('input', setPriceValidation);
 
 const setCapacityValidation = () => {
-  if(Number(numberOfRooms.value) === 1 && Number(numberOfGuests.value) > 1 ) {
-    numberOfRooms.setCustomValidity('1 комната не может вмещать больше 1 гостя.');
-  }
-  else if(Number(numberOfRooms.value) === 2 && Number(numberOfGuests.value) > 2 ) {
-    numberOfRooms.setCustomValidity('2 комнаты не могут вмещать больше 2 гостей.');
+  if(Number(numberOfRooms.value) === 100 && Number(numberOfGuests.value) !== 0) {
+    numberOfGuests.setCustomValidity('100 комнат доступны только не для гостей.');
   }
   else if(Number(numberOfRooms.value) !== 100 && Number(numberOfGuests.value) === 0) {
-    numberOfRooms.setCustomValidity('Не для гостей доступны только 100 комнат.');
+    numberOfGuests.setCustomValidity('Не для гостей доступны только 100 комнат.');
   }
-  else if(Number(numberOfRooms.value) === 100 && Number(numberOfGuests.value) !== 0) {
-    numberOfRooms.setCustomValidity('100 комнат доступны только не для гостей.');
+  else if(Number(numberOfRooms.value) < Number(numberOfGuests.value)) {
+    numberOfGuests.setCustomValidity('Количество гостей не может быть больше комнат.');
   }
   else {
-    numberOfRooms.setCustomValidity('');
+    numberOfGuests.setCustomValidity('');
   }
-  numberOfRooms.reportValidity();
+  numberOfGuests.reportValidity();
 }
 
 numberOfRooms.addEventListener('change', setCapacityValidation);
@@ -121,11 +113,14 @@ const setSendingData = () => {
   });
 };
 
+
 recordStartingAddress(addressInput);
 setMoveMainMarker(addressInput);
 setMinPricePerNight(houseType.value);
+setCapacityValidation();
 syncSelectByIndex(timesIn, timesOut);
 setSendingData();
+
 
 export {clear};
 

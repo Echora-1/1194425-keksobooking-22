@@ -1,6 +1,7 @@
 import {assignActiveStatus as assignPageActiveStatus} from './page-states.js';
 import {create as createAd} from './ad-constructor.js';
 import {getAdMatch} from './filter.js';
+
 /* global L:readonly */
 const STARTING_LATITUDE = 35.6895000;
 const STARTING_LONGITUDE = 139.6917100;
@@ -48,7 +49,7 @@ const setStartPosition = () => {
   }, 13);
 };
 
-const load  = () => {
+const loadMap  = () => {
   map.on('load', () => {
     assignPageActiveStatus();
   })
@@ -93,5 +94,5 @@ const setMoveMainMarker = (input) => {
   });
 };
 
-export {load, createAdMarkers, setStartPosition, recordStartingAddress, setMoveMainMarker};
+export {loadMap, createAdMarkers, setStartPosition, recordStartingAddress, setMoveMainMarker};
 
