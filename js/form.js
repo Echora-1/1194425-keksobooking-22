@@ -1,6 +1,7 @@
 import {setStartPosition, recordStartingAddress, setMoveMainMarker} from './map.js';
 import {sendData} from './server-connection.js';
 import {getSuccess as getSuccessMessage, getError as getErrorMessage} from './status-messages.js';
+import {createImage} from './element-constructor.js';
 
 const MINIMUM_PRICES = {
   bungalow: 0,
@@ -8,9 +9,9 @@ const MINIMUM_PRICES = {
   house: 5000,
   palace: 10000,
 };
-
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const ad = document.querySelector('.ad-form');
 const addressInput = ad.querySelector('#address');
 const titleInput = ad.querySelector('#title');
@@ -23,7 +24,11 @@ const numberOfRooms = ad.querySelector('#room_number');
 const numberOfGuests = ad.querySelector('#capacity');
 const mapFilters = document.querySelector('.map__filters');
 const clearButton = ad.querySelector('.ad-form__reset');
-
+const avatarLoadButton = ad.querySelector('.ad-form__field input[type=file]');
+const avatarPreview = ad.querySelector('.ad-form-header__preview');
+const avatar = avatarPreview.querySelector('img');
+const photoHousingLoadButton = ad.querySelector('.ad-form__upload input[type=file]');
+const photoHousinPreview = ad.querySelector('.ad-form__photo');
 
 const setMinPricePerNight = (houseType) => {
   pricePerNight.setAttribute('placeholder', String(MINIMUM_PRICES[houseType]));
@@ -106,13 +111,39 @@ const setCapacityValidation = () => {
 numberOfRooms.addEventListener('change', setCapacityValidation);
 numberOfGuests.addEventListener('change', setCapacityValidation);
 
+const setloadImage = (loadButton, preview) => {
+  const file = loadButton.files[0];
+  const fileName = loadButton.files[0].name.toLowerCase();
+  let photo = preview;
+  const matches = FILE_TYPES.some((extension) => {
+    return fileName.endsWith(extension);
+  });
+
+  if(photo.tagName === 'DIV') {
+    photo = createImage();
+    preview.style.position = 'relative';
+    preview.appendChild(photo);
+  }
+
+  if(matches){
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      photo.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
+  }
+};
+
+avatarLoadButton.addEventListener('change',() => setloadImage(avatarLoadButton, avatar));
+photoHousingLoadButton.addEventListener('change',() => setloadImage(photoHousingLoadButton, photoHousinPreview));
+
 const setSendingData = () => {
   ad.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(getSuccessMessage, getErrorMessage, new FormData(evt.target));
   });
 };
-
 
 recordStartingAddress(addressInput);
 setMoveMainMarker(addressInput);
