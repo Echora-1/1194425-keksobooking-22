@@ -1,3 +1,5 @@
+import leaflet from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import {setThrottle} from './utils.js';
 import {assignInactiveStatus as assignPageInactiveStatus} from './page-states.js';
 import {load as loadMap, createAdMarkers} from './map.js';
