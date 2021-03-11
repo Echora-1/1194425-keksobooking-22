@@ -1,9 +1,9 @@
-const form = document.querySelector('.map__filters');
-const housingType = form.querySelector('[name="housing-type"]');
-const housingPrice = form.querySelector('[name="housing-price"]');
-const housingRooms = form.querySelector('[name="housing-rooms"]');
-const housingGuests = form.querySelector('[name="housing-guests"]');
-const housingFeatures = form.querySelector('#housing-features');
+const formMainElement = document.querySelector('.map__filters');
+const housingTypeElement = formMainElement.querySelector('[name="housing-type"]');
+const housingPriceElement = formMainElement.querySelector('[name="housing-price"]');
+const housingRoomsElement = formMainElement.querySelector('[name="housing-rooms"]');
+const housingGuestsElement = formMainElement.querySelector('[name="housing-guests"]');
+const housingFeaturesElement = formMainElement.querySelector('#housing-features');
 
 const getPrice = (value) => {
   switch(value) {
@@ -20,7 +20,7 @@ const getPrice = (value) => {
 
 const getMatchingFeatures = (selectedFeatures, features) => {
   let match = true;
-  if(selectedFeatures.length === 0){
+  if(selectedFeatures.length === 0) {
     return match;
   }
   selectedFeatures.forEach(element => {
@@ -33,11 +33,11 @@ const getMatchingFeatures = (selectedFeatures, features) => {
 
 const getAdMatch = (ad) => {
   let match = true;
-  const price = getPrice(housingPrice.value);
-  const features = Array.from(housingFeatures.children).filter(element => element.checked);
+  const price = getPrice(housingPriceElement.value);
+  const features = Array.from(housingFeaturesElement.children).filter(element => element.checked);
   const valueFeatures = features.map(item => item.value);
   const adFeatures = ad.offer.features;
-  if(ad.offer.type !== housingType.value && housingType.value !== 'any') {
+  if(ad.offer.type !== housingTypeElement.value && housingTypeElement.value !== 'any') {
     match = false;
     return match;
   }
@@ -45,11 +45,11 @@ const getAdMatch = (ad) => {
     match = false;
     return match;
   }
-  if(ad.offer.rooms !== Number(housingRooms.value) && housingRooms.value !== 'any') {
+  if(ad.offer.rooms !== Number(housingRoomsElement.value) && housingRoomsElement.value !== 'any') {
     match = false;
     return match;
   }
-  if(ad.offer.guests !== Number(housingGuests.value) && housingGuests.value !== 'any') {
+  if(ad.offer.guests !== Number(housingGuestsElement.value) && housingGuestsElement.value !== 'any') {
     match = false;
     return match;
   }
@@ -58,17 +58,17 @@ const getAdMatch = (ad) => {
   return match;
 };
 
-const setMapChanges = (cb) => {
-  form.addEventListener('change', (evt) => {
+const onMapChanges = (cb) => {
+  formMainElement.addEventListener('change', (evt) => {
     if(evt.target.tagName === 'SELECT') {
       cb();
     }
   });
-  housingFeatures.addEventListener('change', (evt) => {
+  housingFeaturesElement.addEventListener('change', (evt) => {
     if(evt.target.tagName === 'INPUT') {
       cb();
     }
   });
 };
 
-export {getAdMatch, setMapChanges};
+export {getAdMatch, onMapChanges};

@@ -1,6 +1,6 @@
 import {removeСhildByClass} from './utils.js';
 
-const template = document.querySelector('#card').content.querySelector('.popup');
+const templateMainElement = document.querySelector('#card').content.querySelector('.popup');
 
 const getTranslationBuildingType = (word) => {
   switch (word) {
@@ -40,38 +40,38 @@ const getFeatureListItem = (feature) => {
   return item;
 };
 
-const getPhotoListItem = (templatePhoto, photoSrc) => {
-  const photo = templatePhoto.cloneNode(true);
+const getPhotoListItem = (templateMainElementPhoto, photoSrc) => {
+  const photo = templateMainElementPhoto.cloneNode(true);
   photo.src = photoSrc;
   return photo;
 };
 
 const create = (item) => {
-  const ad = template.cloneNode(true);
+  const adMainElement = templateMainElement.cloneNode(true);
   const buildingType = getTranslationBuildingType(item.offer.type);
   const roomDeclension = getDeclensionWordRoom(item.offer.rooms)
-  const photosList =  ad.querySelector('.popup__photos');
-  const photosListItem = ad.querySelector('.popup__photo');
-  const featureList = ad.querySelector('.popup__features');
+  const photosListElement =  adMainElement.querySelector('.popup__photos');
+  const photosListItemElement = adMainElement.querySelector('.popup__photo');
+  const featureListElement = adMainElement.querySelector('.popup__features');
 
-  ad.querySelector('.popup__title').textContent = item.offer.title;
-  ad.querySelector('.popup__text--address').textContent = item.offer.address;
-  ad.querySelector('.popup__text--price').textContent = `${String(item.offer.price)} ₽/ночь`;
-  ad.querySelector('.popup__type').textContent = buildingType;
-  ad.querySelector('.popup__text--capacity').textContent = `${String(item.offer.rooms)} ${roomDeclension} для ${String(item.offer.guests)} гостей`;
-  ad.querySelector('.popup__text--time').textContent = `Заезд после ${item.offer.checkin}, выезд до ${item.offer.checkout}`;
+  adMainElement.querySelector('.popup__title').textContent = item.offer.title;
+  adMainElement.querySelector('.popup__text--address').textContent = item.offer.address;
+  adMainElement.querySelector('.popup__text--price').textContent = `${String(item.offer.price)} ₽/ночь`;
+  adMainElement.querySelector('.popup__type').textContent = buildingType;
+  adMainElement.querySelector('.popup__text--capacity').textContent = `${String(item.offer.rooms)} ${roomDeclension} для ${String(item.offer.guests)} гостей`;
+  adMainElement.querySelector('.popup__text--time').textContent = `Заезд после ${item.offer.checkin}, выезд до ${item.offer.checkout}`;
 
-  removeСhildByClass(featureList, 'popup__feature');
-  item.offer.features.forEach((element) => featureList.appendChild(getFeatureListItem(element)));
+  removeСhildByClass(featureListElement, 'popup__feature');
+  item.offer.features.forEach((element) => featureListElement.appendChild(getFeatureListItem(element)));
 
-  ad.querySelector('.popup__description').textContent = `${buildingType} ${item.offer.description}`;
+  adMainElement.querySelector('.popup__description').textContent = `${buildingType} ${item.offer.description}`;
 
-  removeСhildByClass(photosList, 'popup__photo');
-  item.offer.photos.forEach((element) => photosList.appendChild(getPhotoListItem(photosListItem, element)));
+  removeСhildByClass(photosListElement, 'popup__photo');
+  item.offer.photos.forEach((element) => photosListElement.appendChild(getPhotoListItem(photosListItemElement, element)));
 
-  ad.querySelector('.popup__avatar').src = item.author.avatar;
+  adMainElement.querySelector('.popup__avatar').src = item.author.avatar;
 
-  return ad;
+  return adMainElement;
 };
 
 export {create};
