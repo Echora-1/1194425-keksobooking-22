@@ -1,8 +1,9 @@
 const removeСhildByClass = (parentElement, childClass) => {
   const arrayChildren = Array.from(parentElement.children);
   arrayChildren.forEach((element) => {
-    if(element.classList.contains(childClass));
-    parentElement.removeChild(element);
+    if(element.classList.contains(childClass)) {
+      parentElement.removeChild(element);
+    }
   });
 };
 
@@ -35,4 +36,12 @@ const setThrottle = (func, ms) => {
   return throttle;
 };
 
-export {removeСhildByClass, setThrottle};
+const isEscPressed = (evt) => {
+  return evt.key === 'Escape' || evt.key === 'Esc';
+};
+
+const isLeftMouseButtonPressed = (evt) => {
+  return evt.type === 'mousedown' && evt.which === 1 ;
+};
+
+export {removeСhildByClass, setThrottle, isEscPressed, isLeftMouseButtonPressed};

@@ -24,7 +24,7 @@ const getMatchingFeatures = (selectedFeatures, features) => {
     return match;
   }
   selectedFeatures.forEach(element => {
-    if(!(features.includes(element))) {
+    if(!(features.includes(element.value))) {
       match = false;
     }
   });
@@ -34,8 +34,7 @@ const getMatchingFeatures = (selectedFeatures, features) => {
 const getAdMatch = (ad) => {
   let match = true;
   const price = getPrice(housingPriceElement.value);
-  const features = Array.from(housingFeaturesElement.children).filter(element => element.checked);
-  const valueFeatures = features.map(item => item.value);
+  const selectedFeatures = Array.from(housingFeaturesElement.querySelectorAll('input:checked'));
   const adFeatures = ad.offer.features;
   if(ad.offer.type !== housingTypeElement.value && housingTypeElement.value !== 'any') {
     match = false;
@@ -54,11 +53,11 @@ const getAdMatch = (ad) => {
     return match;
   }
 
-  match = getMatchingFeatures(valueFeatures, adFeatures);
+  match = getMatchingFeatures(selectedFeatures, adFeatures);
   return match;
 };
 
-const onMapChanges = (cb) => {
+const setMapChanges = (cb) => {
   formMainElement.addEventListener('change', (evt) => {
     if(evt.target.tagName === 'SELECT') {
       cb();
@@ -71,4 +70,4 @@ const onMapChanges = (cb) => {
   });
 };
 
-export {getAdMatch, onMapChanges};
+export {getAdMatch, setMapChanges};

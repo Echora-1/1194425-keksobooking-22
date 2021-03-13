@@ -1,5 +1,6 @@
 const createImage = () => {
   const image = document.createElement('img');
+  image.classList.add('photo-housing')
   image.style.position = 'absolute';               /* 2 */
   image.style.top = '50%';
   image.style.left = '50%';

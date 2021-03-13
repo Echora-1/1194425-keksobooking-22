@@ -2,6 +2,7 @@ import {setStartPosition, recordStartingAddress, setMoveMainMarker, createAdMark
 import {sendData, getData} from './server-connection.js';
 import {getSuccess as getSuccessMessage, getError as getErrorMessage} from './status-messages.js';
 import {createImage} from './element-constructor.js';
+import {removeСhildByClass} from './utils.js';
 
 const MINIMUM_PRICES = {
   bungalow: 0,
@@ -12,6 +13,9 @@ const MINIMUM_PRICES = {
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const DEFAULT_IMAGE = 'img/muffin-grey.svg';
+const VALUE_100_ROOMS = 100;
+const VALUE_NOT_FOR_GUESTS = 0;
 const adMainElement = document.querySelector('.ad-form');
 const addressInputElement = adMainElement.querySelector('#address');
 const titleInputElement = adMainElement.querySelector('#title');
@@ -27,17 +31,15 @@ const avatarLoadButtonElement = adMainElement.querySelector('.ad-form__field inp
 const avatarPreviewElement = adMainElement.querySelector('.ad-form-header__preview');
 const avatarElement = avatarPreviewElement.querySelector('img');
 const photoHousingLoadButtonElement = adMainElement.querySelector('.ad-form__upload input[type=file]');
-const photoHousinPreviewElement = adMainElement.querySelector('.ad-form__photo');
+const photoHousingPreviewElement = adMainElement.querySelector('.ad-form__photo');
 const mapFiltersElement = document.querySelector('.map__filters');
 
-const setMinPricePerNight = (houseTypeElement) => {
-  pricePerNightElement.setAttribute('placeholder', String(MINIMUM_PRICES[houseTypeElement]));
-  pricePerNightElement.setAttribute('min', String(MINIMUM_PRICES[houseTypeElement]));
+const onMinPricePerNightChange = (houseTypeElement) => {
+  pricePerNightElement.setAttribute('placeholder', MINIMUM_PRICES[houseTypeElement]);
+  pricePerNightElement.setAttribute('min', MINIMUM_PRICES[houseTypeElement]);
 };
 
-houseTypeElement.addEventListener('change', () => {
-  setMinPricePerNight(houseTypeElement.value);
-});
+houseTypeElement.addEventListener('change', () => onMinPricePerNightChange(houseTypeElement.value));
 
 const syncSelectByIndex = (firstSelect, secondSelect) => {
   firstSelect.addEventListener('change', () => {
@@ -48,6 +50,11 @@ const syncSelectByIndex = (firstSelect, secondSelect) => {
   });
 };
 
+const clearImage = () => {
+  avatarElement.src = DEFAULT_IMAGE;
+  removeСhildByClass(photoHousingPreviewElement, 'photo-housing');
+};
+
 const clear = () => {
   adMainElement.reset();
   mapFiltersElement.reset();
@@ -56,6 +63,7 @@ const clear = () => {
   getData((data) => {
     createAdMarkers(data);
   });
+  clearImage();
 };
 
 clearButtonElement.addEventListener('click', (evt) => {
@@ -63,7 +71,7 @@ clearButtonElement.addEventListener('click', (evt) => {
   clear();
 });
 
-const setTitleValidation = () => {
+const onTitleValidationInput = () => {
   const valueLength = titleInputElement.value.length;
 
   if (valueLength < MIN_TITLE_LENGTH) {
@@ -78,9 +86,9 @@ const setTitleValidation = () => {
   titleInputElement.reportValidity();
 };
 
-titleInputElement.addEventListener('input', setTitleValidation);
+titleInputElement.addEventListener('input', onTitleValidationInput);
 
-const setPriceValidation = () => {
+const onPriceValidationSelect = () => {
   const valuePrice = priceInputElement.value;
 
   if (Number(priceInputElement.getAttribute('min')) > valuePrice) {
@@ -92,14 +100,14 @@ const setPriceValidation = () => {
   priceInputElement.reportValidity();
 };
 
-houseTypeElement.addEventListener('change', setPriceValidation);
-priceInputElement.addEventListener('input', setPriceValidation);
+houseTypeElement.addEventListener('change', onPriceValidationSelect);
+priceInputElement.addEventListener('input', onPriceValidationSelect);
 
-const setCapacityValidation = () => {
-  if(Number(numberOfRoomsElement.value) === 100 && Number(numberOfGuestsElement.value) !== 0) {
+const onCapacityValidationChange = () => {
+  if(Number(numberOfRoomsElement.value) === VALUE_100_ROOMS && Number(numberOfGuestsElement.value) !== VALUE_NOT_FOR_GUESTS) {
     numberOfGuestsElement.setCustomValidity('100 комнат доступны только не для гостей.');
   }
-  else if(Number(numberOfRoomsElement.value) !== 100 && Number(numberOfGuestsElement.value) === 0) {
+  else if(Number(numberOfRoomsElement.value) !== VALUE_100_ROOMS && Number(numberOfGuestsElement.value) === VALUE_NOT_FOR_GUESTS) {
     numberOfGuestsElement.setCustomValidity('Не для гостей доступны только 100 комнат.');
   }
   else if(Number(numberOfRoomsElement.value) < Number(numberOfGuestsElement.value)) {
@@ -111,10 +119,10 @@ const setCapacityValidation = () => {
   numberOfGuestsElement.reportValidity();
 }
 
-numberOfRoomsElement.addEventListener('change', setCapacityValidation);
-numberOfGuestsElement.addEventListener('change', setCapacityValidation);
+numberOfRoomsElement.addEventListener('change', onCapacityValidationChange);
+numberOfGuestsElement.addEventListener('change', onCapacityValidationChange);
 
-const setloadImage = (loadButton, preview) => {
+const onDownloadButtonLoad = (loadButton, preview) => {
   const file = loadButton.files[0];
   const fileName = loadButton.files[0].name.toLowerCase();
   let photo = preview;
@@ -138,8 +146,8 @@ const setloadImage = (loadButton, preview) => {
   }
 };
 
-avatarLoadButtonElement.addEventListener('change',() => setloadImage(avatarLoadButtonElement, avatarElement));
-photoHousingLoadButtonElement.addEventListener('change',() => setloadImage(photoHousingLoadButtonElement, photoHousinPreviewElement));
+avatarLoadButtonElement.addEventListener('change',() => onDownloadButtonLoad(avatarLoadButtonElement, avatarElement));
+photoHousingLoadButtonElement.addEventListener('change',() => onDownloadButtonLoad(photoHousingLoadButtonElement, photoHousingPreviewElement));
 
 const setSendingData = () => {
   adMainElement.addEventListener('submit', (evt) => {
@@ -150,8 +158,8 @@ const setSendingData = () => {
 
 recordStartingAddress(addressInputElement);
 setMoveMainMarker(addressInputElement);
-setMinPricePerNight(houseTypeElement.value);
-setCapacityValidation();
+onMinPricePerNightChange(houseTypeElement.value);
+onCapacityValidationChange();
 syncSelectByIndex(timesInElement, timesOutElement);
 setSendingData();
 

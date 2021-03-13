@@ -1,63 +1,66 @@
 import {assignActiveStatus as assignPageActiveStatus, assignInactiveStatus as assignPageInactiveStatus} from './page-states.js';
 import {clear} from './form.js';
+import {isEscPressed, isLeftMouseButtonPressed} from './utils';
 
 const mainElement = document.querySelector('main');
 const successElement = document.querySelector('#success').content.querySelector('.success');
 const errorElement = document.querySelector('#error').content.querySelector('.error');
 const errorButtonElement = errorElement.querySelector('.error__button');
 
+const сloseSuccessMessage = (evt) => {
+  evt.preventDefault();
+  successElement.remove();
+  assignPageActiveStatus();
+  document.removeEventListener('keydown', onSuccessMessageClosedPressingEsc);
+  document.removeEventListener('mousedown', onSuccessMessageClosedMouseClick);
+};
 
-const closeSuccessKeydown = (evt) => {
-  if(evt.key === 'Escape' || evt.key === 'Esc') {
-    evt.preventDefault();
-    successElement.remove();
-    assignPageActiveStatus();
-    document.removeEventListener('keydown', closeSuccessKeydown);
+const onSuccessMessageClosedPressingEsc = (evt) => {
+  if(isEscPressed(evt)) {
+    сloseSuccessMessage(evt);
   }
 }
 
-const closeSuccessMousedown = (evt) => {
-  if(evt.type === 'mousedown' && evt.which === 1 ) {
-    evt.preventDefault();
-    successElement.remove();
-    assignPageActiveStatus();
-    document.removeEventListener('mousedown', closeSuccessMousedown);
+const onSuccessMessageClosedMouseClick = (evt) => {
+  if(isLeftMouseButtonPressed(evt)) {
+    сloseSuccessMessage(evt);
   }
 }
 
 const getSuccess = () => {
   successElement.style.zIndex = 1000;
   mainElement.append(successElement);
+  window.scrollTo(0, 0);
   clear();
   assignPageInactiveStatus();
-  document.addEventListener('keydown', closeSuccessKeydown);
-  document.addEventListener('mousedown', closeSuccessMousedown);
+  document.addEventListener('keydown', onSuccessMessageClosedPressingEsc);
+  document.addEventListener('mousedown', onSuccessMessageClosedMouseClick);
 }
 
-const closeErrorKeydown = (evt) => {
-  if(evt.key === 'Escape' || evt.key === 'Esc') {
-    evt.preventDefault();
-    errorElement.remove();
-    assignPageActiveStatus();
-    document.removeEventListener('keydown', closeErrorKeydown);
+const сloseErrorMessage = (evt) => {
+  evt.preventDefault();
+  errorElement.remove();
+  assignPageActiveStatus();
+  document.removeEventListener('keydown', onErrorMessageClosedPressingEsc);
+  document.removeEventListener('mousedown', onErrorMessageClosedMouseClick);
+  errorButtonElement.removeEventListener('click', onErrorMessageClosedPressedButton);
+};
+
+const onErrorMessageClosedPressingEsc = (evt) => {
+  if(isEscPressed(evt)) {
+    сloseErrorMessage(evt);
   }
 }
 
-const closeErrorMousedown = (evt) => {
-  if(evt.type === 'mousedown' && evt.which === 1) {
-    evt.preventDefault();
-    errorElement.remove();
-    assignPageActiveStatus();
-    document.removeEventListener('mousedown', closeErrorMousedown);
+const onErrorMessageClosedMouseClick = (evt) => {
+  if(isLeftMouseButtonPressed(evt)) {
+    сloseErrorMessage(evt);
   }
 }
 
-const closeErrorButton = (evt) => {
+const onErrorMessageClosedPressedButton = (evt) => {
   if(evt.type === 'click') {
-    evt.preventDefault()
-    errorElement.remove();
-    assignPageActiveStatus();
-    document.removeEventListener('mousedown', closeErrorButton);
+    сloseErrorMessage(evt);
   }
 }
 
@@ -65,9 +68,9 @@ const getError = () => {
   errorElement.style.zIndex = 1000;
   mainElement.append(errorElement);
   assignPageInactiveStatus();
-  document.addEventListener('keydown', closeErrorKeydown);
-  document.addEventListener('mousedown', closeErrorMousedown);
-  errorButtonElement.addEventListener('click', closeErrorButton);
+  document.addEventListener('keydown', onErrorMessageClosedPressingEsc);
+  document.addEventListener('mousedown', onErrorMessageClosedMouseClick);
+  errorButtonElement.addEventListener('click', onErrorMessageClosedPressedButton);
 }
 
 export {getSuccess, getError}

@@ -56,20 +56,37 @@ const create = (item) => {
 
   adMainElement.querySelector('.popup__title').textContent = item.offer.title;
   adMainElement.querySelector('.popup__text--address').textContent = item.offer.address;
-  adMainElement.querySelector('.popup__text--price').textContent = `${String(item.offer.price)} ₽/ночь`;
+  adMainElement.querySelector('.popup__text--price').textContent = `${item.offer.price} ₽/ночь`;
   adMainElement.querySelector('.popup__type').textContent = buildingType;
-  adMainElement.querySelector('.popup__text--capacity').textContent = `${String(item.offer.rooms)} ${roomDeclension} для ${String(item.offer.guests)} гостей`;
+  adMainElement.querySelector('.popup__text--capacity').textContent = `${item.offer.rooms} ${roomDeclension} для ${item.offer.guests} гостей`;
   adMainElement.querySelector('.popup__text--time').textContent = `Заезд после ${item.offer.checkin}, выезд до ${item.offer.checkout}`;
 
-  removeСhildByClass(featureListElement, 'popup__feature');
-  item.offer.features.forEach((element) => featureListElement.appendChild(getFeatureListItem(element)));
+  if(item.offer.features.length === 0) {
+    featureListElement.remove();
+  }
+  else {
+    removeСhildByClass(featureListElement, 'popup__feature');
+    item.offer.features.forEach((element) => featureListElement.appendChild(getFeatureListItem(element)));
+  }
 
-  adMainElement.querySelector('.popup__description').textContent = `${buildingType} ${item.offer.description}`;
+  if(item.offer.description.length === 0) {
+    removeСhildByClass(adMainElement, 'popup__description');
+  }
+  else {
+    adMainElement.querySelector('.popup__description').textContent = item.offer.description;
+  }
 
-  removeСhildByClass(photosListElement, 'popup__photo');
-  item.offer.photos.forEach((element) => photosListElement.appendChild(getPhotoListItem(photosListItemElement, element)));
+  if(item.offer.photos.length === 0) {
+    photosListElement.remove();
+  }
+  else {
+    removeСhildByClass(photosListElement, 'popup__photo');
+    item.offer.photos.forEach((element) => photosListElement.appendChild(getPhotoListItem(photosListItemElement, element)));
+  }
 
-  adMainElement.querySelector('.popup__avatar').src = item.author.avatar;
+  if(item.author.avatar.length !== 0) {
+    adMainElement.querySelector('.popup__avatar').src = item.author.avatar;
+  }
 
   return adMainElement;
 };

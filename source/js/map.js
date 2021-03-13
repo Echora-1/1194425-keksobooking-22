@@ -57,29 +57,34 @@ const load  = () => {
   setStartPosition();
 };
 
-
 const createAdMarkers = (data) => {
+  const copyData = data.slice();
+  const filteredData = [];
+
   markersLayer.clearLayers();
-  data.slice()
-    .filter(ad => getAdMatch(ad))
-    .slice(0, AMOUNT_MARKERS)
-    .forEach((element) => {
-      const marker = L.marker({
-        lat: element.location.lat,
-        lng: element.location.lng,
-      },
+  for(let i = 0; i < copyData.length && filteredData.length < AMOUNT_MARKERS; i++) {
+    if(getAdMatch(copyData[i])) {
+      filteredData.push(copyData[i]);
+    }
+  }
+
+  filteredData.forEach((element) => {
+    const marker = L.marker({
+      lat: element.location.lat,
+      lng: element.location.lng,
+    },
+    {
+      icon: adMarkerIcon,
+    },
+    );
+    marker.bindPopup(
+      createAd(element),
       {
-        icon: adMarkerIcon,
+        keepInView: true,
       },
-      );
-      marker.bindPopup(
-        createAd(element),
-        {
-          keepInView: true,
-        },
-      );
-      markersLayer.addLayer(marker);
-    });
+    );
+    markersLayer.addLayer(marker);
+  });
   markersLayer.addTo(map);
 }
 
