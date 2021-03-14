@@ -1,8 +1,7 @@
-import 'leaflet/dist/leaflet.css';
-import 'leaflet/dist/leaflet.js';
 import {assignActiveStatus as assignPageActiveStatus} from './page-states.js';
 import {create as createAd} from './ad-constructor.js';
 import {getAdMatch} from './filter.js';
+import L from 'leaflet';
 
 const STARTING_LATITUDE = 35.6895000;
 const STARTING_LONGITUDE = 139.6917100;
