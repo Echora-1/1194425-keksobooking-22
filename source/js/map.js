@@ -3,7 +3,6 @@ import {create as createAd} from './ad-constructor.js';
 import {getAdMatch} from './filter.js';
 /* global L:readonly */
 
-
 const STARTING_LATITUDE = 35.6895000;
 const STARTING_LONGITUDE = 139.6917100;
 const URL_TEMPLATEL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
