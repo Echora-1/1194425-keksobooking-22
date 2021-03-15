@@ -1,5 +1,5 @@
-import {setStartPosition, recordStartingAddress, setMoveMainMarker, createAdMarkers} from './map.js';
-import {sendData, getData} from './server-connection.js';
+import {setStartPosition, recordStartingAddress, setMoveMainMarker} from './map.js';
+import {sendData} from './server-connection.js';
 import {getSuccess as getSuccessMessage, getError as getErrorMessage} from './status-messages.js';
 import {createImage} from './element-constructor.js';
 import {removeСhildByClass} from './utils.js';
@@ -60,9 +60,6 @@ const clear = () => {
   mapFiltersElement.reset();
   setStartPosition();
   recordStartingAddress(addressInputElement);
-  getData((data) => {
-    createAdMarkers(data);
-  });
   clearImage();
 };
 
@@ -149,6 +146,12 @@ const onDownloadButtonLoad = (loadButton, preview) => {
 avatarLoadButtonElement.addEventListener('change',() => onDownloadButtonLoad(avatarLoadButtonElement, avatarElement));
 photoHousingLoadButtonElement.addEventListener('change',() => onDownloadButtonLoad(photoHousingLoadButtonElement, photoHousingPreviewElement));
 
+const setClearButtonClick = (cb) => {
+  clearButtonElement.addEventListener('click', () => {
+    cb();
+  });
+};
+
 const setSendingData = () => {
   adMainElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -164,4 +167,4 @@ syncSelectByIndex(timesInElement, timesOutElement);
 setSendingData();
 
 
-export {clear};
+export {clear, setClearButtonClick};
